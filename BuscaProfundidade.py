@@ -1,4 +1,3 @@
-from queue import Queue
 import datetime as dt
 from util import printif
 

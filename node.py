@@ -2,12 +2,13 @@ from copy import deepcopy
 
 class Node:
 
-    def __init__(self, state, parent=None, deepth=0, cost=0, action=None):
+    def __init__(self, state, parent=None, deepth=0, cost=0, action=None, heuristica=0):
         self.state  = state
         self.parent = parent
         self.deepth = deepth
         self.cost   = cost
         self.action = action
+        self.heuristica = heuristica
 
     def __eq__(self, node):
         return (self.state == node.state)

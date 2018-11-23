@@ -16,7 +16,8 @@ class Puzzle():
         for row in self.matrix:
             # string = string + ' '.join(map(str, row)) + '\n'
             for col in row:
-                col = '\u2400' if col == None else col
+                # col = '\u2400' if col == None else col
+                col = '-' if col == None else col
                 string = string + str(col) + '\t'
             string = string + '\n\t '
         return string
