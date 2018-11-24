@@ -11,4 +11,4 @@ def h2(no, objetivo):
     h = 0
     for col in range(len(no.state.matrix)):
         for row in range(len(no.state.matrix[col])):
-            
+            pass

@@ -2,7 +2,7 @@ from copy import deepcopy
 
 class Node:
 
-    def __init__(self, state, parent=None, deepth=0, cost=0, action=None, heuristica=0):
+    def __init__(self, state, parent=None, deepth=0, cost=0, action=None, heuristica=None):
         self.state  = state
         self.parent = parent
         self.deepth = deepth
@@ -14,7 +14,8 @@ class Node:
         return (self.state == node.state)
 
     def __str__(self):
-        return '\n\t Deepth: ' + str(self.deepth) + '\n\t Cost: ' + str(self.cost) + '\n\t State:\n' + str(self.state)
+        h = '\n\t Heuristica: ' + str(self.heuristica) if self.heuristica != None else ''
+        return '\n\t Deepth: ' + str(self.deepth) + '\n\t Cost: ' + str(self.cost) + h + '\n\t State:\n' + str(self.state)
         
     def path(self):
         parent_path = self.parent.path() if self.parent else ''

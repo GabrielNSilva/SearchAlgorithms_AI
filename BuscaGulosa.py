@@ -1,5 +1,6 @@
 import datetime as dt
 from util import printif
+from time import sleep
 
 def BuscaGulosa(no_raiz, objetivo, heuristica):
 
@@ -7,25 +8,37 @@ def BuscaGulosa(no_raiz, objetivo, heuristica):
     it = 0
     max_len = 0
 
-    lista = list()
-    # lista.append(no_raiz)
+
+    no_raiz.heuristica = heuristica(no_raiz, objetivo)
+    folhas = list()
+    visitados = list()
+    visitados.append(no_raiz)
     no = no_raiz
 
-    while true:
-        max_len = len(lista) if len(lista) > max_len else max_len
+    while True:
+        max_len = len(folhas)+len(visitados) if len(folhas)+len(visitados) > max_len else max_len
         it = it + 1
 
+        printif()
+        printif(folhas)
+
+        printif('Iteracao ' + str(it))
+        printif(no)
+
         if no == objetivo:
-            return no
+            return {'success': True, 'node': no, 'stored': len(folhas)+len(visitados), 'max_stored': max_len, 'iterations': it, 'time': dt.datetime.now() - ini}
 
         # comentar linha abaixo para ativar backtracking
-        lista = list()
+        # folhas = list()
         for sucessor in no.get_sucessores():
-            sucessor.heuristica = heuristica(sucessor)
-            lista.append(sucessor)
+            sucessor.heuristica = heuristica(sucessor, objetivo)
+            if sucessor not in visitados:
+                folhas.append(sucessor)
 
-        # busca na lista nó com menor heuristica
-        for n in lista:
+        # busca na lista de folhas o nó com menor heuristica
+        no = folhas[0]
+        for n in folhas:
             no = n if n.heuristica < no.heuristica else no
         # n esqueca de retirar no da lista pq ele n vai mas ser folha
-        lista.remove(no)
+        folhas.remove(no)
+        visitados.append(no)

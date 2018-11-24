@@ -4,7 +4,9 @@ from BuscaLargura import BuscaLargura
 from BuscaProfundidade import BuscaProfundidade
 from BuscaProfundidadeLimitada import BuscaProfundidadeLimitada
 from BuscaAprofundamentoIterativo import BuscaAprofundamentoIterativo
-from util import printif
+from BuscaGulosa import BuscaGulosa
+from Heuristicas import *
+from util import *
 
 # obj = Puzzle(2, 2, [[1,2],[3,None]])
 # objetivo = Node(obj)
@@ -63,19 +65,7 @@ no_raiz.state.move(2)
 
     # largura = BuscaLargura(no_raiz, objetivo)
     # print('Largura:')
-    # if largura['success']:
-    #     print('\t- Iterações: ' + str(largura['iterations']))
-    #     print('\t- Tempo: ' + str(largura['time']))
-    #     print('\t- Nodes armazenados (memória) [max]: ' + str(largura['max_stored']))
-    #     print('\t- Nodes armazenados (memória) [fim]: ' + str(largura['stored']))
-    #     print('\t- Node resposta: ' + str(largura['node']))
-    #     print('\t- Caminho: ' + largura['node'].path())
-    # else:
-    #     print('Falhou!')
-    #     print('\t- Iterações: ' + str(largura['iterations']))
-    #     print('\t- Tempo: ' + str(largura['time']))
-    #     print('\t- Nodes armazenados (memória) [max]: ' + str(largura['max_stored']))
-    #     print('\t- Nodes armazenados (memória) [fim]: ' + str(largura['stored']))
+    # print_reponse(largura)
 
 ############################################### BuscaProfundidade ###############################################
 
@@ -87,20 +77,7 @@ no_raiz.state.move(2)
 
     # profundidade = BuscaProfundidade(no_raiz, objetivo)
     # print('Profundidade:')
-    # print('\t(Desativado pois entra em loop infinito)')
-    # if profundidade['success']:
-    #     print('\t- Iterações: ' + str(profundidade['iterations']))
-    #     print('\t- Tempo: ' + str(profundidade['time']))
-    #     print('\t- Nodes armazenados (memória) [max]: ' + str(profundidade['max_stored']))
-    #     print('\t- Nodes armazenados (memória) [fim]: ' + str(profundidade['stored']))
-    #     print('\t- Node resposta: ' + str(profundidade['node']))
-    #     print('\t- Caminho: ' + profundidade['node'].path())
-    # else:
-    #     print('Falhou!')
-    #     print('\t- Iterações: ' + str(profundidade['iterations']))
-    #     print('\t- Tempo: ' + str(profundidade['time']))
-    #     print('\t- Nodes armazenados (memória) [max]: ' + str(profundidade['max_stored']))
-    #     print('\t- Nodes armazenados (memória) [fim]: ' + str(profundidade['stored']))
+    # print_reponse(profundidade)
 
 ############################################### BuscaProfundidadeLimitada ###############################################
 
@@ -112,49 +89,20 @@ no_raiz.state.move(2)
 
     # limitada = BuscaProfundidadeLimitada(no_raiz, objetivo, 20)
     # print('Profundidade Limitada:')
-    # if limitada['success']:
-    #     print('\t- Iterações: ' + str(limitada['iterations']))
-    #     print('\t- Tempo: ' + str(limitada['time']))
-    #     print('\t- Nodes armazenados (memória) [max]: ' + str(limitada['max_stored']))
-    #     print('\t- Nodes armazenados (memória) [fim]: ' + str(limitada['stored']))
-    #     print('\t- Node resposta: ' + str(limitada['node']))
-    #     print('\t- Caminho: ' + limitada['node'].path())
-    # else:
-    #     print('Falhou!')
-    #     print('\t- Iterações: ' + str(limitada['iterations']))
-    #     print('\t- Tempo: ' + str(limitada['time']))
-    #     print('\t- Nodes armazenados (memória) [max]: ' + str(limitada['max_stored']))
-    #     print('\t- Nodes armazenados (memória) [fim]: ' + str(limitada['stored']))
+    # print_reponse(limitada)
 
 ############################################### BuscaAprofundamentoIterativo ###############################################
 
-print()
-print('-------------------------------------------------------')
-print()
-print('Raiz: ')
-print(no_raiz.state)
+# print()
+# print('-------------------------------------------------------')
+# print()
+# print('Raiz: ')
+# print(no_raiz.state)
 
-iterarivo = BuscaAprofundamentoIterativo(no_raiz, objetivo)
+# iterarivo = BuscaAprofundamentoIterativo(no_raiz, objetivo)
 
-print('Aprofundamento Iterarivo:')
-
-if iterarivo['success']:
-    print('\t- Iterações: ' + str(iterarivo['iterations']))
-    print('\t- Tempo: ' + str(iterarivo['time']))
-    print('\t- Nodes armazenados (memória) [max]: ' + str(iterarivo['max_stored']))
-    print('\t- Nodes armazenados (memória) [fim]: ' + str(iterarivo['stored']))
-    print('\t- Node resposta: ' + str(iterarivo['node']))
-    print('\t- Caminho: ' + iterarivo['node'].path())
-else:
-    print('Falhou!')
-    print('\t- Iterações: ' + str(iterarivo['iterations']))
-    print('\t- Tempo: ' + str(iterarivo['time']))
-    print('\t- Nodes armazenados (memória) [max]: ' + str(iterarivo['max_stored']))
-    print('\t- Nodes armazenados (memória) [fim]: ' + str(iterarivo['stored']))
-
-print()
-print('-------------------------------------------------------')
-print()
+# print('Aprofundamento Iterarivo:')
+# print_reponse(iterarivo)
 
 ############################################### BuscaGulosa ###############################################
 
@@ -164,58 +112,20 @@ print()
 print('Raiz: ')
 print(no_raiz.state)
 
-iterarivo = BuscaGulosa(no_raiz, objetivo)
+gulosa = BuscaGulosa(no_raiz, objetivo, h1)
 
 print('Gulosa:')
-
-if iterarivo['success']:
-    print('\t- Iterações: ' + str(iterarivo['iterations']))
-    print('\t- Tempo: ' + str(iterarivo['time']))
-    print(
-        '\t- Nodes armazenados (memória) [max]: ' + str(iterarivo['max_stored']))
-    print('\t- Nodes armazenados (memória) [fim]: ' + str(iterarivo['stored']))
-    print('\t- Node resposta: ' + str(iterarivo['node']))
-    print('\t- Caminho: ' + iterarivo['node'].path())
-else:
-    print('Falhou!')
-    print('\t- Iterações: ' + str(iterarivo['iterations']))
-    print('\t- Tempo: ' + str(iterarivo['time']))
-    print(
-        '\t- Nodes armazenados (memória) [max]: ' + str(iterarivo['max_stored']))
-    print('\t- Nodes armazenados (memória) [fim]: ' + str(iterarivo['stored']))
-
-print()
-print('-------------------------------------------------------')
-print()
+print_reponse(gulosa)
 
 ############################################### BuscaAE ###############################################
 
-print()
-print('-------------------------------------------------------')
-print()
-print('Raiz: ')
-print(no_raiz.state)
+# print()
+# print('-------------------------------------------------------')
+# print()
+# print('Raiz: ')
+# print(no_raiz.state)
 
-iterarivo = BuscaAE(no_raiz, objetivo)
+# estrela = BuscaAE(no_raiz, objetivo)
 
-print('AE:')
-
-if iterarivo['success']:
-    print('\t- Iterações: ' + str(iterarivo['iterations']))
-    print('\t- Tempo: ' + str(iterarivo['time']))
-    print(
-        '\t- Nodes armazenados (memória) [max]: ' + str(iterarivo['max_stored']))
-    print('\t- Nodes armazenados (memória) [fim]: ' + str(iterarivo['stored']))
-    print('\t- Node resposta: ' + str(iterarivo['node']))
-    print('\t- Caminho: ' + iterarivo['node'].path())
-else:
-    print('Falhou!')
-    print('\t- Iterações: ' + str(iterarivo['iterations']))
-    print('\t- Tempo: ' + str(iterarivo['time']))
-    print(
-        '\t- Nodes armazenados (memória) [max]: ' + str(iterarivo['max_stored']))
-    print('\t- Nodes armazenados (memória) [fim]: ' + str(iterarivo['stored']))
-
-print()
-print('-------------------------------------------------------')
-print()
+# print('A*:')
+# print_reponse(estrela)
