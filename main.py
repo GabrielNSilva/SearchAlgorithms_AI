@@ -5,6 +5,7 @@ from BuscaProfundidade import BuscaProfundidade
 from BuscaProfundidadeLimitada import BuscaProfundidadeLimitada
 from BuscaAprofundamentoIterativo import BuscaAprofundamentoIterativo
 from BuscaGulosa import BuscaGulosa
+from BuscaAEstrela import BuscaAEstrela
 from Heuristicas import *
 from util import *
 
@@ -119,13 +120,13 @@ print_reponse(gulosa)
 
 ############################################### BuscaAE ###############################################
 
-# print()
-# print('-------------------------------------------------------')
-# print()
-# print('Raiz: ')
-# print(no_raiz.state)
+print()
+print('-------------------------------------------------------')
+print()
+print('Raiz: ')
+print(no_raiz.state)
 
-# estrela = BuscaAE(no_raiz, objetivo)
+estrela = BuscaAEstrela(no_raiz, objetivo, h1)
 
-# print('A*:')
-# print_reponse(estrela)
+print('A*:')
+print_reponse(estrela)

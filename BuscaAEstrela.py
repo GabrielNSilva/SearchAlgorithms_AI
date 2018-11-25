@@ -2,7 +2,7 @@ import datetime as dt
 from util import printif
 from time import sleep
 
-def BuscaGulosa(no_raiz, objetivo, heuristica):
+def BuscaAEstrela(no_raiz, objetivo, heuristica):
 
     ini = dt.datetime.now()
     it = 0
@@ -37,7 +37,7 @@ def BuscaGulosa(no_raiz, objetivo, heuristica):
         # busca na lista de folhas o nó com menor heuristica
         no = folhas[0]
         for n in folhas:
-            no = n if n.heuristica < no.heuristica else no
+            no = n if n.heuristica+n.cost < no.heuristica+no.cost else no
         # n esqueca de retirar no da lista pq ele n vai mas ser folha
         folhas.remove(no)
         visitados.append(no)
