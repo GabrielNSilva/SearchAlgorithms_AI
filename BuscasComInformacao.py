@@ -1,0 +1,2 @@
+from BuscaGulosa import BuscaGulosa
+from BuscaAEstrela import BuscaAEstrela

@@ -1,132 +1,86 @@
-from puzzle import Puzzle
 from node import Node
-from BuscaLargura import BuscaLargura
-from BuscaProfundidade import BuscaProfundidade
-from BuscaProfundidadeLimitada import BuscaProfundidadeLimitada
-from BuscaAprofundamentoIterativo import BuscaAprofundamentoIterativo
-from BuscaGulosa import BuscaGulosa
-from BuscaAEstrela import BuscaAEstrela
-from Heuristicas import *
-from util import *
+from puzzle import *
 
-# obj = Puzzle(2, 2, [[1,2],[3,None]])
-# objetivo = Node(obj)
-# raiz = Puzzle(2, 2, [[1,2],[3,None]])
-# no_raiz = Node(raiz)
-# obj = Puzzle(3, 3, [[1,2,3],[4,5,6],[7,8,None]])
-# objetivo = Node(obj)
-# raiz = Puzzle(3, 3, [[1,2,3],[4,5,6],[7,8,None]])
-# no_raiz = Node(raiz)
-obj = Puzzle(3, 3, [[1,2,3],[4,5,6],[7,8,None]])
-objetivo = Node(obj)
-# raiz = Puzzle(3, 3, [[4,None,2],[5,6,8],[1,7,3]])
-# raiz = Puzzle(3, 3, [[5,4,2],[1,6,8],[None,7,3]])
-raiz = Puzzle(3, 3, [[1, 2, 3], [4, 5, 6], [7, 8, None]])
-no_raiz = Node(raiz)
-# obj = Puzzle(5, 5, [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15],[16,17,18,19,20],[21,22,23,24,None]])
-# objetivo = Node(obj)
-# raiz = Puzzle(5, 5, [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15],[16,17,18,19,20],[21,22,23,24,None]])
-# no_raiz = Node(raiz)
+from BuscasSemInformacao import *
+from BuscasComInformacao import *
+from Heuristicas import *
+
+from util import *
 
 print('Para ativar ou destivar os prints de debug utilize a flag PRINT_ATIVO no arquivo \'util.py\'')
 printif('Prints de debug ativados......')
 
-no_raiz.state.move(1)
-no_raiz.state.move(3)
-no_raiz.state.move(1)
-no_raiz.state.move(3)
-no_raiz.state.move(0)
-no_raiz.state.move(2)
-no_raiz.state.move(0)
-no_raiz.state.move(2)
-#no_raiz.state.move(1)
-#no_raiz.state.move(3)
-#no_raiz.state.move(1)
-#no_raiz.state.move(3)
-#no_raiz.state.move(1)
-#no_raiz.state.move(3)
-#no_raiz.state.move(1)
-#no_raiz.state.move(3)
-#no_raiz.state.move(0)
-#no_raiz.state.move(2)
-# no_raiz.state.move(0)
-# no_raiz.state.move(2)
-# no_raiz.state.move(0)
-# no_raiz.state.move(2)
-# no_raiz.state.move(0)
-# no_raiz.state.move(2)
+# Definindo no objetivo
+obj = Puzzle(3, 3, [[1,2,3],[4,5,6],[7,8,None]])
+objetivo = Node(obj)
 
-############################################### BuscaLargura ###############################################
+# gerando nos aleatórios da profundidade 2 até 8
+allstates = list()
+for profundidade in range(2,9):
+    # Dez estados de cada profundidade
+    for k in range(10):
+        # Definindo estado inicial
+        raiz = Puzzle(3, 3, [[1, 2, 3], [4, 5, 6], [7, 8, None]])
+        no_raiz = Node(raiz)
 
-    # print()
-    # print('-------------------------------------------------------')
-    # print()
-    # print('Raiz: ')
-    # print(no_raiz.state)
+        visitados = [deepcopy(no_raiz)]
+        p = 0
+        novo = False
+        while not novo or p < profundidade:
+            moveu = no_raiz.state.move(randint(0,3))
+            novo = no_raiz not in visitados
+            if novo: # gerou novo estado, consequentemente moveu
+                p += 1
+                no_raiz.deepth = p
+                visitados.append(deepcopy(no_raiz))
+            elif moveu:  # moveu, mas n gerou novo estado
+                for n in visitados:
+                    if no_raiz == n:
+                        p = n.deepth
+                no_raiz.deepth = p
+        no_raiz.heuristica = h2(no_raiz, objetivo)
+        allstates.append(deepcopy(no_raiz))
 
-    # largura = BuscaLargura(no_raiz, objetivo)
-    # print('Largura:')
-    # print_reponse(largura)
+time_0 = dt.datetime.now()
+time_0 = time_0 - time_0
+medias = {
+    'gu_h1': [{'stored': 0, 'max_stored': 0, 'iterations': 0, 'time': time_0} for q in range(7)],
+    'gu_h2': [{'stored': 0, 'max_stored': 0, 'iterations': 0, 'time': time_0} for q in range(7)],
+    'ae_h1': [{'stored': 0, 'max_stored': 0, 'iterations': 0, 'time': time_0} for q in range(7)],
+    'ae_h2': [{'stored': 0, 'max_stored': 0, 'iterations': 0, 'time': time_0} for q in range(7)],
+}
 
-############################################### BuscaProfundidade ###############################################
+for no in allstates:
 
-    # print()
-    # print('-------------------------------------------------------')
-    # print()
-    # print('Raiz: ')
-    # print(no_raiz.state)
+    # armazenando profundidade para calculo do b*
+    pr = no.deepth - 2
+    # definindo profundidade do nó no inicio da busca
+    no.deepth = 0
 
-    # profundidade = BuscaProfundidade(no_raiz, objetivo)
-    # print('Profundidade:')
-    # print_reponse(profundidade)
+    ######### BuscaGulosa #########
 
-############################################### BuscaProfundidadeLimitada ###############################################
+    gulosa = BuscaGulosa(no, objetivo, h1)
+    for key in medias['gu_h1'][pr]:
+        if pr == 6:
+            print('medias[\'gu_h1\'][',pr,'][',key,'] += ',gulosa[key],'/10')
+        medias['gu_h1'][pr][key] += gulosa[key]/10 # divide por 10 para dar a media, pois sao 10 valores de cada profundidade (pr)
+    # print_reponse(gulosa)
 
-    # print()
-    # print('-------------------------------------------------------')
-    # print()
-    # print('Raiz: ')
-    # print(no_raiz.state)
+    gulosa = BuscaGulosa(no, objetivo, h2)
+    for key in medias['gu_h2'][pr]:
+        medias['gu_h2'][pr][key] += gulosa[key]/10 # divide por 10 para dar a media, pois sao 10 valores de cada profundidade (pr)
+    # print_reponse(gulosa)
 
-    # limitada = BuscaProfundidadeLimitada(no_raiz, objetivo, 20)
-    # print('Profundidade Limitada:')
-    # print_reponse(limitada)
+    ######### BuscaAE #########
 
-############################################### BuscaAprofundamentoIterativo ###############################################
+    estrela = BuscaAEstrela(no, objetivo, h1)
+    for key in medias['ae_h1'][pr]:
+        medias['ae_h1'][pr][key] += estrela[key]/10 # divide por 10 para dar a media, pois sao 10 valores de cada profundidade (pr)
+    # print_reponse(estrela)
 
-# print()
-# print('-------------------------------------------------------')
-# print()
-# print('Raiz: ')
-# print(no_raiz.state)
+    estrela = BuscaAEstrela(no, objetivo, h2)
+    for key in medias['ae_h2'][pr]:
+        medias['ae_h2'][pr][key] += estrela[key]/10 # divide por 10 para dar a media, pois sao 10 valores de cada profundidade (pr)
+    # print_reponse(estrela)
 
-# iterarivo = BuscaAprofundamentoIterativo(no_raiz, objetivo)
-
-# print('Aprofundamento Iterarivo:')
-# print_reponse(iterarivo)
-
-############################################### BuscaGulosa ###############################################
-
-print()
-print('-------------------------------------------------------')
-print()
-print('Raiz: ')
-print(no_raiz.state)
-
-gulosa = BuscaGulosa(no_raiz, objetivo, h1)
-
-print('Gulosa:')
-print_reponse(gulosa)
-
-############################################### BuscaAE ###############################################
-
-print()
-print('-------------------------------------------------------')
-print()
-print('Raiz: ')
-print(no_raiz.state)
-
-estrela = BuscaAEstrela(no_raiz, objetivo, h1)
-
-print('A*:')
-print_reponse(estrela)
+print_avg_table(medias)

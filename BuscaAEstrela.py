@@ -1,6 +1,5 @@
 import datetime as dt
 from util import printif
-from time import sleep
 
 def BuscaAEstrela(no_raiz, objetivo, heuristica):
 
